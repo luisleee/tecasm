@@ -148,8 +148,7 @@ export function assemble(source) {
         case 'JC': {
           const target = resolveTarget(args, labels);
           if (target === null) { error = `未定义标签或非法数字: ${args}`; break; }
-          // offset = target - @ where @ = address of JC instruction (PC <- @ + offset)
-          const offset = target - iAddr;
+          const offset = target - (iAddr + 1);
           if (offset < -8 || offset > 7) { error = `跳转偏移超出4位有符号范围 [-8,7]: ${offset}`; break; }
           byte = (0b0111 << 4) | (offset & 0xF);
           break;
@@ -157,7 +156,7 @@ export function assemble(source) {
         case 'JZ': {
           const target = resolveTarget(args, labels);
           if (target === null) { error = `未定义标签或非法数字: ${args}`; break; }
-          const offset = target - iAddr;
+          const offset = target - (iAddr + 1);
           if (offset < -8 || offset > 7) { error = `跳转偏移超出4位有符号范围 [-8,7]: ${offset}`; break; }
           byte = (0b1000 << 4) | (offset & 0xF);
           break;

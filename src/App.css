@@ -327,6 +327,8 @@ body { -webkit-font-smoothing: antialiased; }
 .editor-container > div,
 .editor-container .cm-editor { height: 100%; }
 
+
+
 /* ── Right: machine code ── */
 /*
  * Column layout: [linenum(44px) + addr(30px) = gutter] | 1px border | content

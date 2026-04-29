@@ -17,7 +17,7 @@ START:
   LD R0, [R1]
   ST R2, [R3]
   JC END
-  JZ END
+  JZ 0EH
   OUT R0
   JMP [R2]
   DI
