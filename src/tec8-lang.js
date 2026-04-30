@@ -1,13 +1,14 @@
 import { StreamLanguage, HighlightStyle, syntaxHighlighting } from '@codemirror/language'
 import { tags } from '@lezer/highlight'
-import { EditorView } from '@codemirror/view'
+import { EditorView, keymap } from '@codemirror/view'
 import { Compartment } from '@codemirror/state'
 import { linter, lintGutter } from '@codemirror/lint'
+import { closeBrackets, closeBracketsKeymap } from '@codemirror/autocomplete'
 import { assemble } from './assembler'
 
 const MNEMONICS = new Set([
   'NOP','ADD','SUB','AND','INC','LD','ST',
-  'JC','JZ','JMP','OUT','IRET','DI','EI','STOP',
+  'JC','JZ','JMP','OUT','IRET','DI','EI','STOP','DATA',
 ])
 
 export const tec8Language = StreamLanguage.define({
@@ -155,6 +156,8 @@ export function makeTec8Extensions(isDark) {
     themeCompartment.of(isDark ? [darkEditorTheme, darkHighlight] : [lightEditorTheme, lightHighlight]),
     tec8Linter,
     lintGutter(),
+    closeBrackets({ brackets: ['['] }),
+    keymap.of(closeBracketsKeymap),
   ]
 }
 

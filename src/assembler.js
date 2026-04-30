@@ -180,6 +180,13 @@ export function assemble(source) {
         case 'DI':   byte = 0b11000000; break;
         case 'EI':   byte = 0b11010000; break;
         case 'STOP': byte = 0b11100000; break;
+        case 'DATA': {
+          const val = parseByte(args);
+          if (val === null) error = `DATA: 非法数字: ${args}`;
+          else if (val < -128 || val > 255) error = `DATA: 数值超出字节范围 [-128, 255]: ${val}`;
+          else byte = val & 0xFF;
+          break;
+        }
         default:
           error = `未知指令: ${mnem}`;
       }
@@ -191,6 +198,14 @@ export function assemble(source) {
   }
 
   return results;
+}
+
+function parseByte(s) {
+  const t = s.trim();
+  if (/^[0-9A-Fa-f]+H$/i.test(t)) return parseInt(t.slice(0, -1), 16);
+  if (/^[01]+B$/i.test(t)) return parseInt(t.slice(0, -1), 2);
+  if (/^-?\d+$/.test(t)) return Number(t);
+  return null;
 }
 
 function resolveTarget(args, labels) {
